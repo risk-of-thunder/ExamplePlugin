@@ -1,4 +1,4 @@
-# R2Boilerplate
+# Example Plugin
 
 This repository contains a sample mod for Risk of Rain 2.
 
