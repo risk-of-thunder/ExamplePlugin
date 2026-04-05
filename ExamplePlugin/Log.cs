@@ -1,4 +1,6 @@
 ﻿using BepInEx.Logging;
+using System.Runtime.CompilerServices;
+using System.IO;
 
 namespace ExamplePlugin
 {
@@ -11,11 +13,46 @@ namespace ExamplePlugin
             _logSource = logSource;
         }
 
-        internal static void Debug(object data) => _logSource.LogDebug(data);
-        internal static void Error(object data) => _logSource.LogError(data);
-        internal static void Fatal(object data) => _logSource.LogFatal(data);
-        internal static void Info(object data) => _logSource.LogInfo(data);
-        internal static void Message(object data) => _logSource.LogMessage(data);
-        internal static void Warning(object data) => _logSource.LogWarning(data);
+        private static string Format(object data, string file, int line)
+        {
+            string fileName = Path.GetFileName(file);
+            return $"[{fileName}:{line}] {data}";
+        }
+
+        internal static void Debug(
+            object data,
+            [CallerFilePath] string file = "",
+            [CallerLineNumber] int line = 0)
+            => _logSource.LogDebug(Format(data, file, line));
+
+        internal static void Error(
+            object data,
+            [CallerFilePath] string file = "",
+            [CallerLineNumber] int line = 0)
+            => _logSource.LogError(Format(data, file, line));
+
+        internal static void Fatal(
+            object data,
+            [CallerFilePath] string file = "",
+            [CallerLineNumber] int line = 0)
+            => _logSource.LogFatal(Format(data, file, line));
+
+        internal static void Info(
+            object data,
+            [CallerFilePath] string file = "",
+            [CallerLineNumber] int line = 0)
+            => _logSource.LogInfo(Format(data, file, line));
+
+        internal static void Message(
+            object data,
+            [CallerFilePath] string file = "",
+            [CallerLineNumber] int line = 0)
+            => _logSource.LogMessage(Format(data, file, line));
+
+        internal static void Warning(
+            object data,
+            [CallerFilePath] string file = "",
+            [CallerLineNumber] int line = 0)
+            => _logSource.LogWarning(Format(data, file, line));
     }
 }
